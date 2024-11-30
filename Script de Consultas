@@ -1,0 +1,39 @@
+-- Listar todos os clientes PF com seus respectivos CPFs
+
+SELECT idCliente, Primeiro_nome, Ultimo_nome, CPF FROM clientes
+	WHERE Tipo_cliente = 'PF';
+
+-- Listar todos os produtos disponíveis por categoria e valor
+
+SELECT idProduto, Produto_nome, Categoria, Valor FROM produto
+	ORDER BY Categoria, Valor;
+    
+-- Consultar pedidos de um cliente específico pelo nome e status
+    
+SELECT p.idPedido, p.Descrição_pedido, p.Status_pedido, c.Primeiro_nome, c.Ultimo_nome FROM pedidos p
+	JOIN clientes c ON p.idCliente = c.idCliente
+	WHERE c.Primeiro_nome = 'João' AND c.Ultimo_nome = 'Silva' AND p.Status_pedido = 'Confirmado';
+
+-- Listar todos os pedidos confirmados com o nome do cliente e o status de entrega
+
+SELECT c.Primeiro_nome, c.Ultimo_nome, p.Descrição_pedido, p.Status_pedido, e.Status_entrega FROM pedidos p
+	JOIN clientes c ON p.idCliente = c.idCliente
+	LEFT JOIN entrega e ON p.idPedido = e.idPedido
+	WHERE p.Status_pedido = 'Confirmado';
+    
+--  Listar os vendedores que fornecem produtos na categoria 'Eletrônico'
+
+SELECT v.Nome_social, v.Contato, p.Produto_nome FROM vendedor v
+	JOIN produto_por_vendedor pv ON v.idVendedor = pv.idPvendedor
+	JOIN produto p ON pv.idPproduto = p.idProduto
+	WHERE p.Categoria = 'Eletrônico';
+    
+-- Verificar os clientes com pedidos cancelados e o valor total dos pedidos
+
+SELECT c.Primeiro_nome, c.Ultimo_nome, COUNT(p.idPedido) AS Pedidos_cancelados, SUM(p.Valor_envio) AS Valor_total_cancelado FROM clientes c
+	JOIN pedidos p ON c.idCliente = p.idCliente
+	WHERE p.Status_pedido = 'Cancelado'
+	GROUP BY c.idCliente;
+
+
+

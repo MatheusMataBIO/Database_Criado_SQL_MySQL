@@ -1,0 +1,146 @@
+CREATE DATABASE IF NOT EXISTS MM_corporationSA;
+USE MM_corporationSA;
+
+-- Tabela de Clientes (PF e PJ)
+CREATE TABLE clientes (
+	idCliente INT AUTO_INCREMENT PRIMARY KEY,
+    Primeiro_nome VARCHAR(50),
+    Nome_meio CHAR(3),
+    Ultimo_nome VARCHAR(50),
+    Tipo_cliente ENUM('PF', 'PJ') NOT NULL,
+    CPF CHAR(11),
+    CNPJ CHAR(14),
+    Endereço VARCHAR(255),
+    Data_de_nascimento DATE,
+    CONSTRAINT chk_cliente CHECK (
+		(Tipo_cliente = 'PF' AND CPF IS NOT NULL AND CNPJ IS NULL) OR
+        (Tipo_cliente = 'PJ' AND CNPJ IS NOT NULL AND CPF IS NULL)
+	),
+    CONSTRAINT unico_cpf UNIQUE (CPF),
+    CONSTRAINT unico_cnpj UNIQUE (CNPJ)
+);
+
+-- Tabela de Produtos
+
+CREATE TABLE produto (
+	idProduto INT AUTO_INCREMENT PRIMARY KEY,
+    Produto_nome VARCHAR(255),
+    Classificação_criança BOOL DEFAULT FALSE,
+    Categoria ENUM('Eletrônico', 'Vestimenta', 'Brinquedos', 'Alimentos', 'Móveis') NOT NULL,
+    Descrição VARCHAR(255),
+    Valor FLOAT NOT NULL
+);
+
+-- Tabela de Pedidos
+
+CREATE TABLE pedidos (
+	idPedido INT AUTO_INCREMENT PRIMARY KEY,
+    idCliente INT,
+    Status_pedido ENUM('Cancelado', 'Confirmado', 'Em processamento') DEFAULT 'Em processamento',
+    Descrição_pedido VARCHAR(255),
+    Valor_envio FLOAT DEFAULT 10,
+    Método_de_pagamento VARCHAR(50),
+    CONSTRAINT fk_pedidos_cliente FOREIGN KEY (idCliente) REFERENCES clientes(idCliente)
+);
+
+-- Tabela de Pagamentos
+
+CREATE TABLE métodos_pagamentos (
+    idPagamento INT AUTO_INCREMENT PRIMARY KEY,
+    idCliente INT,
+    Tipo_de_pagamento ENUM('Cartão de Crédito', 'Cartão de Débito', 'Pix', 'Boleto', 'Transferência Bancária') NOT NULL,
+    Número_cartão VARCHAR(16),
+    Data_expiração DATE,
+    CONSTRAINT fk_pagamento_cliente FOREIGN KEY (idCliente) REFERENCES clientes(idCliente)
+);
+
+-- Tabela de Entregas
+
+CREATE TABLE entrega (
+    idEntrega INT AUTO_INCREMENT PRIMARY KEY,
+    idPedido INT,
+    Status_entrega ENUM('Aguardando Envio', 'Enviado', 'Entregue', 'Cancelado') DEFAULT 'Aguardando Envio',
+    Código_rastreio VARCHAR(50),
+    Data_estimada_entrega DATE,
+    CONSTRAINT fk_entrega_pedido FOREIGN KEY (idPedido) REFERENCES pedidos(idPedido)
+);
+
+-- Tabela de Estoque 
+
+CREATE TABLE estoque (
+    idEstoque INT AUTO_INCREMENT PRIMARY KEY,
+	Local_estoque VARCHAR(255),
+    Quantidade INT DEFAULT 0
+);
+
+-- Tabela de Fornecedor
+
+CREATE TABLE fornecedor (
+    idFornecedor INT AUTO_INCREMENT PRIMARY KEY,
+    Nome_social VARCHAR(255) NOT NULL,
+    CNPJ CHAR(14) NOT NULL,
+    Contato CHAR(11) NOT NULL,
+    CONSTRAINT unico_fornecedor UNIQUE (CNPJ)
+);
+
+-- Tabela Vendedor
+
+CREATE TABLE vendedor(
+	idVendedor INT AUTO_INCREMENT PRIMARY KEY,
+    Nome_social VARCHAR(255) NOT NULL,
+    CNPJ CHAR(14),
+    CPF CHAR(11),
+    Localização VARCHAR(255),
+    Contato CHAR(11) NOT NULL,
+    CONSTRAINT chk_vendedor CHECK(
+		(CNPJ IS NOT NULL AND CPF IS NULL) OR
+        (CPF IS NOT NULL AND CNPJ IS NULL)
+	),
+    CONSTRAINT unico_cnpj_vendedor UNIQUE (CNPJ),
+    CONSTRAINT unico_cpf_vendedor UNIQUE (CPF)
+);
+    
+-- Tabela Produto por Vendedores
+
+CREATE TABLE produto_por_vendedor(
+	idPvendedor INT,
+    idPproduto INT,
+    PRIMARY KEY (idPvendedor, idPproduto),
+    Quantidade_produto INT DEFAULT 1,
+	CONSTRAINT fk_produto_vendedor FOREIGN KEY (idPvendedor) REFERENCES vendedor(idVendedor),
+    CONSTRAINT fk_produto_produto FOREIGN KEY (idPproduto) REFERENCES produto(idProduto)
+);
+
+-- Tabela Relação Produto/Pedido
+
+CREATE TABLE relação_de_produto_por_pedido(
+	idPPproduto INT,
+    idPPpedido INT,
+    PRIMARY KEY(idPPproduto, idPPpedido),
+    Quantidade_produto_pedido INT DEFAULT 1,
+    Status_produto_pedido ENUM('Disponível', 'Sem estoque') DEFAULT 'Disponível',
+    CONSTRAINT fk_produtopedido_produto FOREIGN KEY (idPPproduto) REFERENCES produto(idProduto),
+    CONSTRAINT fk_produtopedido_pedido FOREIGN KEY (idPPpedido) REFERENCES pedidos(idPedido)
+);
+
+-- Tabela de Localizaçao de Produtos em Estoque
+
+CREATE TABLE localização_de_produtos_em_estoque(
+	idLproduto INT,
+    idLestoque INT,
+    PRIMARY KEY(idLproduto, idLestoque),
+    Localização VARCHAR(255) NOT NULL,
+    CONSTRAINT fk_estoque_localização_produto FOREIGN KEY (idLproduto) REFERENCES produto(idProduto),
+    CONSTRAINT fk_estoque_localização_estoque FOREIGN KEY (idLestoque) REFERENCES estoque(idEstoque)
+);
+
+-- Tabela Produtos de Fornecedores
+
+CREATE TABLE produtos_de_fornecedores(
+	idPSfornecedor INT,
+    idPSproduto INT,
+    Quantidade INT NOT NULL,
+    PRIMARY KEY (idPSfornecedor, idPSproduto),
+    CONSTRAINT fk_produto_fornecedor_fornecedor FOREIGN KEY (idPSfornecedor) REFERENCES fornecedor(idFornecedor),
+    CONSTRAINT fk_produto_fornecedor_produto FOREIGN KEY (idPSproduto) REFERENCES produto(idProduto)
+);

@@ -1,0 +1,145 @@
+USE MM_corporationSA;
+
+INSERT INTO clientes (Primeiro_nome, Nome_meio, Ultimo_nome, Tipo_cliente, CPF, CNPJ, Endereço, Data_de_nascimento)
+VALUES
+('João', 'M.', 'Silva', 'PF', '12345678901', NULL, 'Rua das Flores, 123', '1990-05-10'),
+('Maria', 'A.', 'Souza', 'PF', '98765432100', NULL, 'Avenida Central, 456', '1985-09-23'),
+('Pedro', 'B.', 'Oliveira', 'PJ', NULL, '12345678000195', 'Rua Comercial, 12', NULL),
+('Ana', 'C.', 'Pereira', 'PF', '56789012345', NULL, 'Rua Nova, 789', '2000-12-15'),
+('Carlos', 'D.', 'Lima', 'PJ', NULL, '98765432000109', 'Avenida Industrial, 20', NULL),
+('Juliana', 'E.', 'Santos', 'PF', '11223344556', NULL, 'Rua da Praia, 100', '1993-07-05'),
+('Rafael', 'F.', 'Almeida', 'PF', '22334455667', NULL, 'Rua das Palmeiras, 56', '1988-03-30'),
+('Camila', 'G.', 'Ferreira', 'PF', '33445566778', NULL, 'Rua da Colina, 44', '1995-11-21'),
+('Lucas', 'H.', 'Barbosa', 'PJ', NULL, '11223344000176', 'Avenida da Liberdade, 8', NULL),
+('Fernanda', 'I.', 'Costa', 'PF', '44556677889', NULL, 'Rua do Sol, 22', '1982-01-10');
+
+INSERT INTO produto (Produto_nome, Classificação_criança, Categoria, Descrição, Valor)
+VALUES
+('Laptop Dell', FALSE, 'Eletrônico', 'Notebook de alta performance', 4500.00),
+('Smartphone Samsung', FALSE, 'Eletrônico', 'Celular com câmera avançada', 3000.00),
+('Camiseta Infantil', TRUE, 'Vestimenta', 'Camiseta 100% algodão', 50.00),
+('Brinquedo Educativo', TRUE, 'Brinquedos', 'Quebra-cabeça para crianças', 100.00),
+('Sofá Retrátil', FALSE, 'Móveis', 'Sofá confortável para sala', 2500.00),
+('Geladeira', FALSE, 'Eletrônico', 'Geladeira com tecnologia inverter', 3200.00),
+('Calça Jeans', FALSE, 'Vestimenta', 'Calça unissex de alta qualidade', 150.00),
+('Boneca de Pano', TRUE, 'Brinquedos', 'Boneca artesanal para crianças', 80.00),
+('Chocolate', FALSE, 'Alimentos', 'Chocolate ao leite 200g', 10.00),
+('Mesa de Escritório', FALSE, 'Móveis', 'Mesa com acabamento em madeira', 800.00);
+
+INSERT INTO pedidos (idCliente, Status_pedido, Descrição_pedido, Valor_envio, Método_de_pagamento)
+VALUES
+(1, 'Confirmado', 'Compra de produtos eletrônicos', 15.00, 'Cartão de Crédito'),
+(2, 'Em processamento', 'Compra de vestimentas', 10.00, 'Pix'),
+(3, 'Cancelado', 'Compra de móveis', 0.00, 'Boleto'),
+(4, 'Confirmado', 'Compra de brinquedos', 12.00, 'Cartão de Débito'),
+(5, 'Em processamento', 'Compra de alimentos', 10.00, 'Transferência Bancária'),
+(6, 'Confirmado', 'Compra de eletrônicos', 20.00, 'Cartão de Crédito'),
+(7, 'Em processamento', 'Compra de móveis', 15.00, 'Pix'),
+(8, 'Cancelado', 'Compra de brinquedos e vestimentas', 0.00, 'Boleto'),
+(9, 'Confirmado', 'Compra de alimentos', 10.00, 'Transferência Bancária'),
+(10, 'Confirmado', 'Compra de vestimentas e móveis', 15.00, 'Cartão de Débito');
+
+INSERT INTO métodos_pagamentos (idCliente, Tipo_de_pagamento, Número_cartão, Data_expiração)
+VALUES
+(1, 'Cartão de Crédito', '1234123412341234', '2025-06-30'),
+(2, 'Pix', NULL, NULL),
+(3, 'Boleto', NULL, NULL),
+(4, 'Cartão de Débito', '4321432143214321', '2024-12-31'),
+(5, 'Transferência Bancária', NULL, NULL),
+(6, 'Cartão de Crédito', '5678567856785678', '2026-05-31'),
+(7, 'Pix', NULL, NULL),
+(8, 'Boleto', NULL, NULL),
+(9, 'Transferência Bancária', NULL, NULL),
+(10, 'Cartão de Débito', '8765432187654321', '2025-11-30');
+
+INSERT INTO entrega (idPedido, Status_entrega, Código_rastreio, Data_estimada_entrega)
+VALUES
+(1, 'Enviado', 'BR1234567890', '2024-11-20'),
+(2, 'Aguardando Envio', NULL, '2024-11-25'),
+(3, 'Cancelado', NULL, NULL),
+(4, 'Entregue', 'BR0987654321', '2024-11-15'),
+(5, 'Aguardando Envio', NULL, '2024-11-28'),
+(6, 'Enviado', 'BR1122334455', '2024-11-18'),
+(7, 'Aguardando Envio', NULL, '2024-11-27'),
+(8, 'Cancelado', NULL, NULL),
+(9, 'Entregue', 'BR6677889900', '2024-11-12'),
+(10, 'Entregue', 'BR5544332211', '2024-11-17');
+
+INSERT INTO estoque (Local_estoque, Quantidade)
+VALUES
+('Armazém Central', 50),
+('Filial Zona Sul', 30),
+('Filial Zona Norte', 20),
+('Centro de Distribuição', 100),
+('Filial Oeste', 15),
+('Filial Leste', 25),
+('Depósito Central', 80),
+('Armazém Secundário', 40),
+('Estoque Externo', 60),
+('Depósito Regional', 35);
+
+INSERT INTO fornecedor (Nome_social, CNPJ, Contato)
+VALUES
+('Tech Solutions', '12345678000195', '21987654321'),
+('Móveis & Cia', '98765432000109', '21965432187'),
+('Fashion Wear', '11223344000176', '21943216543'),
+('Alimentos Orgânicos', '33445566000187', '21987612345'),
+('Brinquedos Divertidos', '55667788000129', '21976543219'),
+('Eletrônicos Prime', '99887766000145', '21954321678'),
+('Casa & Conforto', '66778899000123', '21932165478'),
+('TecnoWorld', '44556677000192', '21965439876'),
+('MegaFood', '22334455000180', '21954328765'),
+('Kids Fun', '11227799000164', '21987634521');
+
+
+INSERT INTO vendedor (Nome_social, CNPJ, CPF, Localização, Contato)
+VALUES
+-- Inserções para vendedores PJ
+('Tech Distribuidora', '12345678000195', NULL, 'Avenida Paulista, 123 - São Paulo', '11987654321'),
+('Fashion Store LTDA', '98765432000109', NULL, 'Rua das Flores, 456 - Rio de Janeiro', '21965432187'),
+('Moveis Prime', '11223344000176', NULL, 'Avenida Central, 789 - Curitiba', '41943216543'),
+('Alimentos Frescos', '33445566000187', NULL, 'Rua do Mercado, 321 - Salvador', '71987612345'),
+('Kids Toys Ltda', '55667788000129', NULL, 'Rua Brincadeira, 555 - Porto Alegre', '51976543219'),
+
+-- Inserções para vendedores PF
+('Carlos Almeida', NULL, '12345678901', 'Rua das Palmeiras, 120 - Campinas', '19954321678'),
+('Juliana Oliveira', NULL, '98765432100', 'Rua Nova Esperança, 89 - Belo Horizonte', '31943218765'),
+('Rafael Costa', NULL, '11223344556', 'Avenida Rio Branco, 67 - Florianópolis', '48932165478'),
+('Camila Santos', NULL, '22334455667', 'Rua Horizonte Azul, 34 - Vitória', '27965439876'),
+('Lucas Pereira', NULL, '33445566778', 'Rua do Pôr do Sol, 11 - Natal', '84954328765');
+
+INSERT INTO produto_por_vendedor (idPvendedor, idPproduto, Quantidade_produto) VALUES
+(1, 1, 10),
+(2, 2, 15),
+(3, 3, 20),
+(4, 4, 25),
+(5, 5, 5),
+(6, 6, 8),
+(7, 7, 12),
+(8, 8, 18),
+(9, 9, 30),
+(10, 10, 6);
+
+INSERT INTO relação_de_produto_por_pedido (idPPproduto, idPPpedido, Quantidade_produto_pedido, Status_produto_pedido) VALUES
+(1, 1, 1, 'Disponível'),
+(2, 2, 2, 'Disponível'),
+(3, 3, 3, 'Sem estoque'),
+(4, 4, 1, 'Disponível'),
+(5, 5, 1, 'Disponível'),
+(6, 6, 1, 'Sem estoque'),
+(7, 7, 2, 'Disponível'),
+(8, 8, 3, 'Disponível'),
+(9, 9, 2, 'Sem estoque'),
+(10, 10, 3, 'Disponível');
+
+INSERT INTO produtos_de_fornecedores (idPSfornecedor, idPSproduto, Quantidade) VALUES
+(1, 1, 100),
+(2, 2, 150),
+(3, 3, 200),
+(4, 4, 250),
+(5, 5, 300),
+(6, 6, 350),
+(7, 7, 400),
+(8, 8, 450),
+(9, 9, 500),
+(10, 10, 550);

@@ -169,3 +169,10 @@ Chaves estrangeiras para fornecedor e produto.
 
 As consultas foram criadas utilizando SELECT, WHERE, ORDER BY, JOIN, LEFT JOIN, GROUP BY.
 As consultas se encontram em "Script de Consultas".
+
+## Stacks Utilizadas
+
+- <img src="https://upload.wikimedia.org/wikipedia/en/d/dd/MySQL_logo.svg" alt="MySQL Logo" width="100"/>
+
+- <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Sql_data_base_with_logo.png" alt="SQL Logo" width="100"/>
+
